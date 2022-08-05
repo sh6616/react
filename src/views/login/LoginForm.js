@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 // import { withRouter } from 'react-router-dom';
 // ANTD
 import { Form, Input, Button, Row, Col } from 'antd';
-import { UserOutlined, UnlockOutlined  } from '@ant-design/icons';
+import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
 // 验证
 import { validate_password } from "../../utils/validate";
 // 组件
@@ -10,12 +10,12 @@ import Code from "../../components/code/index";
 // 加密
 import CryptoJs from 'crypto-js';
 
-class LoginForm extends Component{
-    constructor(){
+class LoginForm extends Component {
+    constructor() {
         super();
         this.state = {
-            username: "",
-            password: "",
+            username: "1145479929@qq.com",
+            password: "123321",
             code: "",
             module: "login",
             loading: false
@@ -31,15 +31,16 @@ class LoginForm extends Component{
         this.setState({
             loading: true
         })
-        this.props.actions.handlerLogin(requestData).then(response => {
-            this.props.history.push('/index');
-            // 先调用登录接口 => 调用获取角色接口
-            // this.props.actions.headnlerUserRole().then(response => {
-            //     this.props.history.push('/index');
-            // })
-        }).catch(error => {
-            console.log(2222)
-        })
+        // this.props.actions.handlerLogin(requestData).then(response => {
+        //     this.props.history.push('/index');
+        //     // 先调用登录接口 => 调用获取角色接口
+        //     // this.props.actions.headnlerUserRole().then(response => {
+        //     //     this.props.history.push('/index');
+        //     // })
+        // }).catch(error => {
+        //     console.log(2222)
+        // })
+
         // Login(requestData).then(response => {  // resolves
         //     this.setState({
         //         loading: false
@@ -62,6 +63,12 @@ class LoginForm extends Component{
         // })
         // console.log('Received values of form: ', values);
     };
+
+    getVerificatCode = (value) => {
+        this.setState({
+            code: value
+        })
+    }
     /** input输入处理 */
     inputChangeUsername = (e) => {
         let value = e.target.value;
@@ -85,7 +92,7 @@ class LoginForm extends Component{
         // 调父级的方法
         this.props.switchForm("register");
     }
-    render(){
+    render() {
         const { username, module, loading } = this.state;
         return (
             <Fragment>
@@ -95,15 +102,15 @@ class LoginForm extends Component{
                 </div>
                 <div className="form-content">
                     <Form
-                    name="normal_login"
-                    className="login-form"
-                    initialValues={{ remember: true }}
-                    onFinish={this.onFinish}
+                        name="normal_login"
+                        className="login-form"
+                        initialValues={{ remember: true }}
+                        onFinish={this.onFinish}
                     >
                         <Form.Item name="username" rules={
                             [
                                 { required: true, message: "邮箱不能为空" },
-                                { type: "email", message: "邮箱格式不正确"}
+                                { type: "email", message: "邮箱格式不正确" }
                             ]
                         }>
                             <Input value={username} onChange={this.inputChangeUsername} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="email" />
@@ -118,16 +125,16 @@ class LoginForm extends Component{
                         </Form.Item>
                         <Form.Item name="code" rules={
                             [
-                                { required: true, message: '验证码不能为空' },
+                                {  message: '验证码不能为空' },
                                 { len: 6, message: '请输入长度为6位的验证码' }
                             ]
                         } >
                             <Row gutter={13}>
                                 <Col span={15}>
-                                    <Input onChange={this.inputChangeCode} prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="Code" />
+                                    <Input onChange={this.inputChangeCode} prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="Code" value={this.state.code} />
                                 </Col>
                                 <Col span={9}>
-                                    <Code username={username} module={module} />
+                                    <Code username={username} module={module} getVerificatCode={this.getVerificatCode} />
                                 </Col>
                             </Row>
                         </Form.Item>

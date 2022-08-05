@@ -53,6 +53,11 @@ class Code extends Component {
         }
         GetCode(requestData).then(response => {
             message.success(response.data.message);
+            if(requestData.module === 'login') {
+                this.props.getVerificatCode(response.data.verificatCode)
+            }else if(requestData.module === 'register'){
+                this.props.getVerificatCode(response.data.verificatCode)
+            }
             // 执行倒计时
             this.countDown();
         }).catch(error => {
