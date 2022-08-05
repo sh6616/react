@@ -73,7 +73,10 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "build:dev":"dotenv -e .env.development react-app-rewrite build",
+    "build:pro":"dotenv -e .env.production react-app-rewrite build",
+    "build:test":"dotenv -e .env.test react-app-rewrite build"
   },
   "eslintConfig": {
     "extends": "react-app"
