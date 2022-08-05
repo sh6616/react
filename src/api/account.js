@@ -28,7 +28,7 @@ export function Register(data){
  */
 export function GetCode(data){
     return service.request({
-        url: "http://localhost:3001/getSms",
+        url: "/getSms/",
         method: "post",
         data, // 请求类型为 post 时
     })
