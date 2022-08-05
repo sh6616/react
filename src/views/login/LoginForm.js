@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from 'react-router-dom';
 // ANTD
 import { Form, Input, Button, Row, Col } from 'antd';
-import { UserOutlined, UnlockOutlined  } from '@ant-design/icons';
+import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
 // 验证
 import { validate_password } from "../../utils/validate";
 // 组件
@@ -12,10 +12,9 @@ import CryptoJs from 'crypto-js';
 // connect
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-//action
-// import { setTokenAction, setUsernameAction, accountLoginAction } from "@/stroe/action/App";
-class LoginForm extends Component{
-    constructor(){
+
+class LoginForm extends Component {
+    constructor() {
         super();
         this.state = {
             username: "",
@@ -89,7 +88,7 @@ class LoginForm extends Component{
         // 调父级的方法
         this.props.switchForm("register");
     }
-    render(){
+    render() {
         const { username, module, loading } = this.state;
         return (
             <Fragment>
@@ -99,15 +98,15 @@ class LoginForm extends Component{
                 </div>
                 <div className="form-content">
                     <Form
-                    name="normal_login"
-                    className="login-form"
-                    initialValues={{ remember: true }}
-                    onFinish={this.onFinish}
+                        name="normal_login"
+                        className="login-form"
+                        initialValues={{ remember: true }}
+                        onFinish={this.onFinish}
                     >
                         <Form.Item name="username" rules={
                             [
                                 { required: true, message: "邮箱不能为空" },
-                                { type: "email", message: "邮箱格式不正确"}
+                                { type: "email", message: "邮箱格式不正确" }
                             ]
                         }>
                             <Input value={username} onChange={this.inputChangeUsername} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="email" />
@@ -144,24 +143,5 @@ class LoginForm extends Component{
         )
     }
 }
-
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         actions: bindActionCreators({
-//             setToken: setTokenAction,
-//             setUsername: setUsernameAction,
-//             handlerLogin: accountLoginAction
-//         }, dispatch)
-
-//     }
-// }
-
-// export default connect(
-//     null,
-//     mapDispatchToProps
-// )(withRouter(LoginForm));
-
-
 
 export default LoginForm;
