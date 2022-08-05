@@ -93,7 +93,7 @@ class LoginForm extends Component {
         this.props.switchForm("register");
     }
     render() {
-        const { username, module, loading } = this.state;
+        const { username, module, loading,code } = this.state;
         return (
             <Fragment>
                 <div className="form-header">
@@ -131,7 +131,7 @@ class LoginForm extends Component {
                         } >
                             <Row gutter={13}>
                                 <Col span={15}>
-                                    <Input onChange={this.inputChangeCode} prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="Code" value={this.state.code} />
+                                    <Input onChange={this.inputChangeCode} prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="Code" value={code} />
                                 </Col>
                                 <Col span={9}>
                                     <Code username={username} module={module} getVerificatCode={this.getVerificatCode} />
