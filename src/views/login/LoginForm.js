@@ -13,7 +13,7 @@ import CryptoJs from 'crypto-js';
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 //action
-import { setTokenAction, setUsernameAction, accountLoginAction } from "@/stroe/action/App";
+// import { setTokenAction, setUsernameAction, accountLoginAction } from "@/stroe/action/App";
 class LoginForm extends Component{
     constructor(){
         super();
@@ -146,18 +146,22 @@ class LoginForm extends Component{
 }
 
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        actions: bindActionCreators({
-            setToken: setTokenAction,
-            setUsername: setUsernameAction,
-            handlerLogin: accountLoginAction
-        }, dispatch)
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         actions: bindActionCreators({
+//             setToken: setTokenAction,
+//             setUsername: setUsernameAction,
+//             handlerLogin: accountLoginAction
+//         }, dispatch)
 
-    }
-}
+//     }
+// }
 
-export default connect(
-    null,
-    mapDispatchToProps
-)(withRouter(LoginForm));
+// export default connect(
+//     null,
+//     mapDispatchToProps
+// )(withRouter(LoginForm));
+
+
+
+export default LoginForm;
