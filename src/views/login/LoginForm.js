@@ -8,7 +8,7 @@ import { validate_password } from "../../utils/validate";
 // 组件
 import Code from "../../components/code/index";
 // 加密
-import CryptoJs from 'crypto-js';
+// import CryptoJs from 'crypto-js';
 
 class LoginForm extends Component {
     constructor() {
@@ -23,11 +23,11 @@ class LoginForm extends Component {
     }
     // 登录
     onFinish = (values) => {
-        const requestData = {
-            username: this.state.username,
-            code: this.state.code,
-            password: CryptoJs.MD5(this.state.password).toString(),
-        }
+        // const requestData = {
+        //     username: this.state.username,
+        //     code: this.state.code,
+        //     password: CryptoJs.MD5(this.state.password).toString(),
+        // }
         this.setState({
             loading: true
         })

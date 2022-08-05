@@ -47,16 +47,21 @@ class Code extends Component {
             button_loading: true,
             button_text: "发送中"
         })
+        // const requestData = {
+        //     username,
+        //     module: this.state.module
+        // }
+
         const requestData = {
-            username,
-            module: this.state.module
+            'username':'1145479929@qq.com',
+            'module': 'login'
         }
         GetCode(requestData).then(response => {
-            message.success(response.data.message);
+            message.success(response.message);
             if(requestData.module === 'login') {
-                this.props.getVerificatCode(response.data.verificatCode)
+                this.props.getVerificatCode(response.verificatCode)
             }else if(requestData.module === 'register'){
-                this.props.getVerificatCode(response.data.verificatCode)
+                this.props.getVerificatCode(response.verificatCode)
             }
             // 执行倒计时
             this.countDown();
