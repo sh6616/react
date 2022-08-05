@@ -10,8 +10,8 @@ import { Register } from "../../api/account";
 import Code from "../../components/code/index";
 // 加密
 import CryptoJs from 'crypto-js';
-class RetisterForm extends Component{
-    constructor(){
+class RetisterForm extends Component {
+    constructor() {
         super();
         this.state = {
             username: "",
@@ -30,7 +30,7 @@ class RetisterForm extends Component{
         Register(requestData).then(response => {
             const data = response.data;
             message.success(data.message)
-            if(data.resCode === 0) {
+            if (data.resCode === 0) {
                 this.toogleForm();
             }
         }).catch(error => {
@@ -60,7 +60,7 @@ class RetisterForm extends Component{
         // 调父级的方法
         this.props.switchForm("login");
     }
-    render(){
+    render() {
         const { username, module } = this.state;
         return (
             <Fragment>
@@ -70,29 +70,29 @@ class RetisterForm extends Component{
                 </div>
                 <div className="form-content">
                     <Form
-                    name="normal_login"
-                    initialValues={{ remember: true }}
-                    onFinish={this.onFinish}
+                        name="normal_login"
+                        initialValues={{ remember: true }}
+                        onFinish={this.onFinish}
                     >
                         <Form.Item name="username" rules={[
                             { required: true, message: "邮箱不能为空！！" },
-                            { type: "email", message: "邮箱格式不正确"}
+                            { type: "email", message: "邮箱格式不正确" }
                         ]} >
                             <Input onChange={this.inputChangeUsername} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="请输入邮箱" />
                         </Form.Item>
                         <Form.Item name="password" rules={[
                             { required: true, message: "密码不能为空！！" },
                             ({ getFieldValue }) => ({
-                                validator(role, value){
+                                validator(role, value) {
                                     let passwords_value = getFieldValue("passwords"); // 获取再次输入密码的值 
-                                    if(!validate_pass(value)){
+                                    if (!validate_pass(value)) {
                                         return Promise.reject("请输入大于6位小于20位数字+字母")
                                     }
-                                    if(passwords_value && value !== passwords_value) {
+                                    if (passwords_value && value !== passwords_value) {
                                         return Promise.reject("两次密码不一致")
                                     }
                                     return Promise.resolve();
-                                }   
+                                }
                             })
                         ]} >
                             <Input type="password" onChange={this.inputChangePassword} prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="请输入密码" />
@@ -100,12 +100,12 @@ class RetisterForm extends Component{
                         <Form.Item name="passwords" rules={[
                             { required: true, message: "再次确认密码不能为空！！" },
                             ({ getFieldValue }) => ({
-                                validator(role, value){
-                                    if(value !== getFieldValue("password")){
+                                validator(role, value) {
+                                    if (value !== getFieldValue("password")) {
                                         return Promise.reject("两次密码不一致")
                                     }
                                     return Promise.resolve();
-                                }   
+                                }
                             })
                         ]} >
                             <Input type="password" prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="请再次输入密码" />
