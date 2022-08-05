@@ -26,7 +26,7 @@ service.interceptors.request.use(function (config) {
 service.interceptors.response.use(function (response) {  // http状态为200
     // 对响应数据做点什么
     const data = response.data;
-    if(data.resCode !== 0) { // resCode不成功
+    if(data.resCode == 0) { // resCode不成功
         message.info(data.message); // 全局的错误拦截提示
         // 可以针对某些 resCode 值，进行业务逻辑处理
         if(data.resCode === 1023) { 
