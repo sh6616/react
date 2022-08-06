@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 
 class Add extends Component {
-    constructor() {
-        super()
+    // constructor() {
+    //     super()
 
-    }
+    // }
     render() {
         return (
             <div>
