@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 // 引用组件
-// import Home from './views/Home';
-// import About from './views/About';
 import Login from './views/login/index';
+import Index from './views/index/Index';
+// 私有组件方法
+import PrivateRouter from "./components/privateRouter/Index";
 
 
 
@@ -18,7 +19,8 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route component={Login} exact path='/'></Route>
+          <Route exact render={() => <Login />} path='/'></Route>
+          <PrivateRouter component={Index}  path='/index'></PrivateRouter>
         </Switch>
       </BrowserRouter>
     )
