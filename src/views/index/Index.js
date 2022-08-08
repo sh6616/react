@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 // layout组件
-import LayoutAside from "./components/Aside";
 import LayoutHeader from "./components/Header";
+import LayoutAside from "./components/Aside";
 import ContainerMain from "../../components/containerMain/Index";
 // css
 import "./layout.scss";

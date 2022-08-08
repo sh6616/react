@@ -6,20 +6,20 @@ import PrivateRouter from "../privateRouter/Index";
 import Components from "./components";
 
 class ContainerMain extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {};
   }
-  render(){
+  render() {
     // console.log(Components)
     return (
-        <Switch>
-          {
-            Components.map(item => {
-              return <PrivateRouter exact key={item.path} path={item.path} component={item.component} />
-            })
-          }
-        </Switch>
+      <Switch>
+        {
+          Components.map(item => {
+            return <PrivateRouter exact key={item.path} path={item.path} component={item.component} />
+          })
+        }
+      </Switch>
     )
   }
 }

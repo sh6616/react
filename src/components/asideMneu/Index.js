@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Link } from "react-router-dom";
+import { Link,withRouter } from "react-router-dom";
 // icon
 import { UserOutlined } from '@ant-design/icons';
 // antd
@@ -22,13 +22,13 @@ class AsideMenu extends Component {
     
     // 生命周期，在这里多了一层接口请求，并过滤路由
     componentDidMount(){
-        // const pathname = this.props.location.pathname;
-        // const menuKey = pathname.split("/").slice(0, 3).join('/');
-        // const menuHigh = {
-        //     selectedKeys: pathname,
-        //     openKeys: menuKey
-        // }
-        // this.selectMenuHigh(menuHigh);
+        const pathname = this.props.location.pathname;
+        const menuKey = pathname.split("/").slice(0, 3).join('/');
+        const menuHigh = {
+            selectedKeys: pathname,
+            openKeys: menuKey
+        }
+        this.selectMenuHigh(menuHigh);
     }
 
     /** 选择菜单  */
@@ -103,5 +103,5 @@ class AsideMenu extends Component {
 
 
 
-export default AsideMenu;
+export default withRouter(AsideMenu);
 

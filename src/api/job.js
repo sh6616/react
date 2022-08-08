@@ -26,6 +26,7 @@ export function GetList(data){
  * 详情
  */
 export function Detailed(data){
+    console.log(data)
     return service.request({
         url: "/job/detailed/",
         method: "post",
