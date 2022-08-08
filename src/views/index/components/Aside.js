@@ -12,7 +12,6 @@ class Aside extends Component {
     render(){
         return (
             <AsideMenu  routers= {Router}/>
-            // <div>645645</div>
         )
     }
 }

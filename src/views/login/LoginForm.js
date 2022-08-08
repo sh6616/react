@@ -33,9 +33,9 @@ class LoginForm extends Component {
         this.setState({
             loading: true
         })
-        console.log(requestData)    
+        // console.log(requestData)    
         // 存储token
-        setToken(requestData.token);
+        setToken(requestData.username);
         setUsername(requestData.username);
         this.props.history.push('/index');
         
