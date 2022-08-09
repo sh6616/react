@@ -1,183 +1,73 @@
-import React, { Component, Fragment } from "react";
-import { withRouter } from 'react-router-dom';
-// antd
-import { Select } from "antd";
-// API
-import { Detailed } from "@/api/job";
-// import { requestData } from "@api/common";
+import React, { Component } from "react";
+//antd
+import { Form, Input, Button, InputNumber, Radio, message } from 'antd';
 // url
 // import requestUrl from "@api/requestUrl";
-// 组件
-import FormCom from "@c/form/Index";
-const { Option } = Select;
-class DepartmentAdd extends Component {
+import { Add } from "@api/department";
+
+class List extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             loading: false,
-            id: this.props.location.state ? this.props.location.state.id : "",
-            // select
-            select: [
-                { value: 10, label: "研发部", id: 'yanfa' },
-                { value: 11, label: "行政部", id: 'xingzheng' }
-            ],
-            formConfig: {
-                url: "jobAdd",
-                editKey: "",
-                initValue: {
-                    number: 0,
-                    status: true,
-                    parentId: ""
-                },
-                setFieldValue: {},
-                formatFormKey: "parentId"
-            },
-            formLayout: {
+            fomrLayout: {
                 labelCol: { span: 2 },
-                wrapperCol: { span: 20 }
-            },
-            formItem: [
-                {
-                    type: "Slot",
-                    label: "部门",
-                    name: "parentId",
-                    required: true,
-                    slotName: "department",
-                    style: { width: "200px" },
-                    placeholder: "请选择部门"
-                },
-                {
-                    type: "Input",
-                    label: "职位名称",
-                    name: "jobName",
-                    required: true,
-                    style: { width: "200px" },
-                    placeholder: "请输入职位名称"
-                },
-                {
-                    type: "Radio",
-                    label: "禁启用",
-                    name: "status",
-                    required: true,
-                    options: [
-                        { label: "禁用", value: false },
-                        { label: "启用", value: true },
-                    ]
-                },
-                {
-                    type: "Input",
-                    label: "描述",
-                    name: "content",
-                    required: true,
-                    placeholder: "请输入描述内容"
-                }
-            ]
-        };
+                wrapperCol: { span: 20 },
+            }
+        }
     }
-
-    componentDidMount() {
-        this.state.id && this.getDetailed();
-        console.log(this.state.id)
-        console.log(this.props.location)
-        // console.log(this.state.id)
-        this.getSelectList();
-    }
-
-    getDetailed = () => {
-
-        Detailed({ id: this.state.id }).then(response => {
-            this.setState({
-                formConfig: {
-                    ...this.state.formConfig,
-                    setFieldValue: response.data.data,
-                    url: "jobEdit",
-                    editKey: "jobId"
-                }
-            })
-            // this.refs.form.setFieldsValue(response.data.data);
-        })
-    }
-    // 请求数据
-    getSelectList = () => {
-        // const data = {
-        //     url: requestUrl["getDepartmentList"]
-        // }
-        // // 不存在 url 时，阻止
-        // if(!data.url) { return false; }
-        // // 接口
-        // requestData(data).then(response => {
-        //     this.setState({
-        //         select: response.data.data.data
-        //     })
-        // })
+    onFinish = (values) => {
+        if (!values.name) {
+            message.error("部门名称不能为空")
+            return
+        } else if (!values.number || values.number === 0) {
+            message.error("人员数量不能为0")
+            return
+        } else if (!values.content) {
+            message.error("描述内容不能为空")
+            return
+        }
         this.setState({
-            select: [
-                { value: 10, label: "研发部", id: 'yanfa' },
-                { value: 11, label: "行政部", id: 'xingzheng' }
-            ]
+            loading: true
         })
-
-    }
-    /** 编辑信息 */
-    onHandlerEdit = (value) => {
-        // const requestData = value;
-        // requestData.id = this.state.id;
-        // Edit(requestData).then(response => {
-        //     const data = response.data;
-        //     message.info(data.message)
-        //     this.setState({
-        //         loading: false
-        //     })
-        // }).catch(error => {
-        //     this.setState({
-        //         loading: false
-        //     })
-        // })
-    }
-    /** 添加信息 */
-    onHandlerAdd = (value) => {
-        // const requestData = value;
-        // Add(requestData).then(response => {
-        //     const data = response.data;
-        //     message.info(data.message)
-        //     this.setState({
-        //         loading: false
-        //     })
-        // }).catch(error => {
-        //     this.setState({
-        //         loading: false
-        //     })
-        // })
-    }
-    /** 提交表单 */
-    onHandlerSubmit = (value) => {
-        this.state.id ? this.onHandlerEdit(value) : this.onHandlerAdd(value);
-    }
+        Add(values).then(response => {
+            this.setState({
+                loading: false
+            })
+            message.success("添加成功")
+            this.refs.form.resetFields();
+        }).catch(error => {
+            this.setState({
+                loading: false
+            })
+        })
+    };
 
     render() {
         return (
-            <Fragment>
-                <FormCom formItem={this.state.formItem} formLayout={this.state.formLayout} formConfig={this.state.formConfig}>
-                    {/** 插槽 */}
-                    <Select >
-                        {
-                            this.state.select && this.state.select.map(elem => {
-                                return <Option value={elem.id} key={elem.id}>{elem.name}</Option>
-                            })
-                        }
-                    </Select>
-                </FormCom>
-                {
-                    /**
-                     * 1、插槽没有元素的情况，this.props.children 获取的是 undefault。
-                     * 2、只有一个元素的情况，就是一个 object 对象。
-                     * 3、多个的情况下，就是 Array 数组对象。
-                     * 
-                     * this.props.children 获取所有
-                     */
-                }
-            </Fragment>
+            <Form onFinish={this.onFinish} initialValues={{ status: true, number: 0 }} {...this.state.fomrLayout} ref='form'>
+                <Form.Item label="部门名称" name="name">
+                    <Input></Input>
+                </Form.Item>
+                <Form.Item label="人员数量" name="number">
+                    <InputNumber min={0} max={100}></InputNumber>
+                </Form.Item>
+                <Form.Item label="禁启标志" name="status">
+                    <Radio.Group >
+                        <Radio value={false}>禁用</Radio>
+                        <Radio value={true}>启用</Radio>
+                    </Radio.Group>
+                </Form.Item>
+                <Form.Item label="描述" name="content">
+                    <Input></Input>
+                </Form.Item>
+                <Button loading={this.state.loading} type="primary" htmlType="submit">
+                    Submit
+                </Button>
+
+            </Form>
         )
     }
 }
-export default withRouter(DepartmentAdd);
+
+export default List;

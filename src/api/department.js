@@ -16,7 +16,7 @@ export function Add(data){
  */
 export function GetList(data){
     return service.request({
-        url: data.url,
+        url: "/department/getList/",
         method: "post",
         data,
     })

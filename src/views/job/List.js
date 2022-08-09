@@ -1,56 +1,92 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 //antd
-import { Form, Input, Button, InputNumber, Radio } from 'antd';
-// url
-// import requestUrl from "@api/requestUrl";
-import { Add } from "@api/department";
-
-class List extends Component {
-    constructor() {
-        super()
+import { Form, Input, Button, Table } from "antd";
+//api
+import { GetList } from '@api/department'
+class DepartmentList extends Component {
+    constructor(props) {
+        super(props)
         this.state = {
-            fomrLayout: {
-                labelCol: { span: 2 },
-                wrapperCol: { span: 20 },
-            }
-
-
+            //请求参数
+            pageNumber: 1,
+            pageSize: 10,
+            //表头
+            columns: [
+                {
+                    title: '部门名称',
+                    dataIndex: 'name',
+                    key: 'name',
+                },
+                {
+                    title: '禁启用',
+                    dataIndex: 'status',
+                    key: 'status',
+                },
+                {
+                    title: '人员数量',
+                    dataIndex: 'number',
+                    key: 'number',
+                },
+                {
+                    title: '操作',
+                    dataIndex: 'operation',
+                    key: 'operation',
+                }
+            ],
+            //表数据
+            data: []
         }
     }
-    onFinish = (values) => {
-        // console.log('Success:', values);
-        // let value = values
-        // value.table = 'department_add'
-        Add(values).then(response => {
-            console.log(response.data)
-        })
-    };
-
+    componentDidMount() {
+        this.loadData()
+    }
+    loadData = () => {
+        const requestData = {
+            pageNumber: this.state.pageNumber,
+            pageSize: this.state.pageSize
+        }
+        GetList(requestData).then(response => {
+            response.forEach(function(item,index){
+                item.key = index
+            });
+            this.setState({
+                data : response
+            })
+        })  
+    }
+    //搜索
+    onFinish = (value) => {
+        this.loadData()
+    }
     render() {
+        const { columns, data } = this.state
         return (
-            <Form onFinish={this.onFinish} initialValues={{ status: true, number: 0 }} {...this.state.fomrLayout} >
-                <Form.Item label="部门名称" name="name">
-                    <Input></Input>
-                </Form.Item>
-                <Form.Item label="人员数量" name="number">
-                    <InputNumber min={0} max={100}></InputNumber>
-                </Form.Item>
-                <Form.Item label="禁启标志" name="status">
-                    <Radio.Group >
-                        <Radio value={false}>禁用</Radio>
-                        <Radio value={true}>启用</Radio>
-                    </Radio.Group>
-                </Form.Item>
-                <Form.Item label="描述" name="content">
-                    <Input></Input>
-                </Form.Item>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
+            <Fragment>
+                <Form layout="inline" onFinish={this.onFinish}>
+                    <Form.Item label="部门名称" name="username">
+                        <Input placeholder="请输入部门名称"></Input>
+                    </Form.Item>
+                    <Form.Item shouldUpdate={true}>
+                        <Button type="primary" htmlType="submit">搜索</Button>
+                    </Form.Item>
+                </Form>
+                <Table columns={columns} dataSource={data} bordered>
 
-            </Form>
+                </Table>
+            </Fragment>
         )
     }
 }
 
-export default List;
+
+export default DepartmentList;
+
+
+
+
+
+
+
+
+
+
