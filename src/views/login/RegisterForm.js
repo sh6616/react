@@ -5,7 +5,7 @@ import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
 // 验证
 import { validate_pass } from "../../utils/validate";
 // API
-import { Register } from "../../api/account";
+import { Register } from "../../api/login";
 // 组件
 import Code from "../../components/code/index";
 // 加密
@@ -23,15 +23,16 @@ class RetisterForm extends Component {
 
     onFinish = (values) => {
         const requestData = {
-            username: this.state.username,
-            password: CryptoJs.MD5(this.state.password).toString(),
-            code: this.state.code
+            username: values.username,
+            password: CryptoJs.MD5(values.password).toString(),
+            code: '111111'
         }
         Register(requestData).then(response => {
-            const data = response.data;
-            message.success(data.message)
-            if (data.resCode === 0) {
+            if (response.code === 1) {
+                message.success(response.msg)
                 this.toogleForm();
+            } else if (response.code === 0) {
+                message.error(response.msg)
             }
         }).catch(error => {
 
@@ -60,8 +61,15 @@ class RetisterForm extends Component {
         // 调父级的方法
         this.props.switchForm("login");
     }
+    //获取验证码
+    getVerificatCode = (value) => {
+        this.setState({
+            code: value
+        })
+    }
+
     render() {
-        const { username, module } = this.state;
+        const { username, module, code } = this.state;
         return (
             <Fragment>
                 <div className="form-header">
@@ -111,14 +119,14 @@ class RetisterForm extends Component {
                             <Input type="password" prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="请再次输入密码" />
                         </Form.Item>
                         <Form.Item name="code" rules={[
-                            { required: true, message: "请输入长度为6位的字符", len: 6 }
+                            { message: "请输入长度为6位的字符", len: 6 }
                         ]} >
                             <Row gutter={13}>
                                 <Col span={15}>
-                                    <Input onChange={this.inputChangeCode} prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="请输入验证码" />
+                                    <Input onChange={this.inputChangeCode} prefix={<UnlockOutlined className="site-form-item-icon" />} placeholder="请输入验证码" value={code} />
                                 </Col>
                                 <Col span={9}>
-                                    <Code username={username} module={module} />
+                                    <Code username={username} module={module} getVerificatCode={this.getVerificatCode} />
                                 </Col>
                             </Row>
                         </Form.Item>

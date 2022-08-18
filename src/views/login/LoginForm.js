@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from 'react-router-dom';
 // ANTD
-import { Form, Input, Button, Row, Col } from 'antd';
+import { Form, Input, Button, Row, Col, message } from 'antd';
 import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
 // 验证
 import { validate_password } from "../../utils/validate";
@@ -10,7 +10,10 @@ import Code from "../../components/code/index";
 // 加密
 import CryptoJs from 'crypto-js';
 //设置token
-import {setToken,setUsername} from '.././../utils/cookies'
+import { setToken, setUsername } from '.././../utils/cookies'
+//登录 || 注册
+import { Login } from '../../api/login'
+
 
 class LoginForm extends Component {
     constructor() {
@@ -25,20 +28,20 @@ class LoginForm extends Component {
     }
     // 登录
     onFinish = (values) => {
-        const requestData = {
-            username: this.state.username,
-            code: this.state.code,
-            password: CryptoJs.MD5(this.state.password).toString(),
-        }
-        this.setState({
-            loading: true
-        })
+        // const requestData = {
+        //     username: this.state.username,
+        //     code: this.state.code,
+        //     password: CryptoJs.MD5(this.state.password).toString(),
+        // }
+        // this.setState({
+        //     loading: true
+        // })
         // console.log(requestData)    
         // 存储token
-        setToken(requestData.username);
-        setUsername(requestData.username);
-        this.props.history.push('/index');
-        
+        // setToken(requestData.username);
+        // setUsername(requestData.username);
+        // this.props.history.push('/index');
+
         // this.props.actions.handlerLogin(requestData).then(response => {
         //     this.props.history.push('/index');
         //     // 先调用登录接口 => 调用获取角色接口
@@ -46,29 +49,43 @@ class LoginForm extends Component {
         //     //     this.props.history.push('/index');
         //     // })
         // }).catch(error => {
-        //     console.log(2222)
-        // })
 
-        // Login(requestData).then(response => {  // resolves
-            // this.setState({
-                // loading: false
-            // })
-            // const data = response.data.data
+        // })
+        // return
+        const requestData = {
+            username: values.username,
+            code: '111111',
+            password: CryptoJs.MD5(values.password).toString(),
+        }
+
+        Login(requestData).then(response => {  // resolves
+            this.setState({
+                loading: false
+            })
+            if (response.code === 1) {
+                setToken(requestData.username);
+                setUsername(requestData.username);
+                message.success(response.msg)
+                this.props.history.push('/index');
+            } else if (response.code === 0) {
+                message.error(response.msg)
+            }
+            // const data = response
             // actions
             // this.props.actions.setToken(data.token);
             // this.props.actions.setUsername(data.username);
-            // 存储token
+            // // 存储token
             // setToken(data.token);
             // setUsername(data.username);
-            // 存储用户角色 
+            // // 存储用户角色
             // sessionStorage.setItem("role", data.role);
-            // 路由跳转
+            // // 路由跳转
             // this.props.history.push('/index');
-        // }).catch(error => {  // reject
-            // this.setState({
-                // loading: false
-            // })
-        // })
+        }).catch(error => {  // reject
+            this.setState({
+                loading: false
+            })
+        })
         // console.log('Received values of form: ', values);
     };
 
@@ -101,7 +118,7 @@ class LoginForm extends Component {
         this.props.switchForm("register");
     }
     render() {
-        const { username, module, loading,code } = this.state;
+        const { username, module, loading, code } = this.state;
         return (
             <Fragment>
                 <div className="form-header">
@@ -133,7 +150,7 @@ class LoginForm extends Component {
                         </Form.Item>
                         <Form.Item name="code" rules={
                             [
-                                {  message: '验证码不能为空' },
+                                { message: '验证码不能为空' },
                                 { len: 6, message: '请输入长度为6位的验证码' }
                             ]
                         } >
