@@ -79,7 +79,7 @@ class DepartmentList extends Component {
     onFinish = (value) => {
         console.log(this.state.selectedRowKeys)
         this.loadData()
-    }
+    } 
     //模态框
     handleOk = e => {
         let requestData = { id: this.state.id }
