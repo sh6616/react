@@ -77,7 +77,6 @@ class DepartmentList extends Component {
     }
     //搜索
     onFinish = (value) => {
-        console.log(this.state.selectedRowKeys)
         this.loadData()
     } 
     //模态框
