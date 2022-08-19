@@ -42,17 +42,19 @@ class DepartmentList extends Component {
     }
     loadData = () => {
         const requestData = {
+            value: this.refs.getDepartValue.props.value == undefined ? '' : this.refs.getDepartValue.props.value,
             pageNumber: this.state.pageNumber,
             pageSize: this.state.pageSize
         }
+        console.log(requestData)
         GetList(requestData).then(response => {
-            response.forEach(function(item,index){
+            response.data.forEach(function (item, index) {
                 item.key = index
             });
             this.setState({
-                data : response
+                data: response.data
             })
-        })  
+        })
     }
     //搜索
     onFinish = (value) => {
@@ -64,7 +66,7 @@ class DepartmentList extends Component {
             <Fragment>
                 <Form layout="inline" onFinish={this.onFinish}>
                     <Form.Item label="部门名称" name="username">
-                        <Input placeholder="请输入部门名称"></Input>
+                        <Input ref='getDepartValue' placeholder="请输入部门名称"></Input>
                     </Form.Item>
                     <Form.Item shouldUpdate={true}>
                         <Button type="primary" htmlType="submit">搜索</Button>

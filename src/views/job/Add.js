@@ -34,8 +34,10 @@ class List extends Component {
             this.setState({
                 loading: false
             })
-            message.success("添加成功")
-            this.refs.form.resetFields();
+            if (response.code === 1) {
+                message.success(response.msg)
+                this.refs.form.resetFields();
+            }
         }).catch(error => {
             this.setState({
                 loading: false
