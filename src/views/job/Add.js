@@ -3,19 +3,85 @@ import React, { Component } from "react";
 import { Form, Input, Button, InputNumber, Radio, message } from 'antd';
 // url
 // import requestUrl from "@api/requestUrl";
-import { Add } from "@api/department";
+import { Add, Detailed, Edit } from "@api/department";
 
 class List extends Component {
     constructor(props) {
         super(props)
         this.state = {
             loading: false,
+            id: "",
             fomrLayout: {
                 labelCol: { span: 2 },
                 wrapperCol: { span: 20 },
             }
         }
     }
+
+    componentWillMount() {
+        if (this.props.location.state) {
+            this.setState({
+                id: this.props.location.state ? this.props.location.state.id : ""
+            })
+        }
+    }
+
+    componentDidMount() {
+        this.getSelectList()
+    }
+
+    // 请求数据
+    getSelectList = () => {
+        if (!this.props.location.state) {
+            return
+        }
+        Detailed({ id: this.state.id }).then(response => {
+            this.refs.form.setFieldsValue({
+                content: response.data[0].content,
+                name: response.data[0].name,
+                number: response.data[0].number,
+                status: response.data[0].status === '1' ? true : false
+            })
+        })
+    }
+
+
+    /** 编辑信息 */
+    onHandlerEdit = (values) => {
+        let valuesT = values
+        valuesT['id'] = this.state.id
+        Edit(values).then(response => {
+            this.setState({
+                loading: false
+            })
+            if (response.code === 1) {
+                message.success(response.msg)
+                this.refs.form.resetFields();
+            }
+        }).catch(error => {
+            this.setState({
+                loading: false
+            })
+        })
+    }
+
+    /** 添加信息 */
+    onHandlerAdd = (values) => {
+        Add(values).then(response => {
+            this.setState({
+                loading: false
+            })
+            if (response.code === 1) {
+                message.success(response.msg)
+                this.refs.form.resetFields();
+            }
+        }).catch(error => {
+            this.setState({
+                loading: false
+            })
+        })
+    }
+
     onFinish = (values) => {
         if (!values.name) {
             message.error("部门名称不能为空")
@@ -30,19 +96,7 @@ class List extends Component {
         this.setState({
             loading: true
         })
-        Add(values).then(response => {
-            this.setState({
-                loading: false
-            })
-            if (response.code === 1) {
-                message.success(response.msg)
-                this.refs.form.resetFields();
-            }
-        }).catch(error => {
-            this.setState({
-                loading: false
-            })
-        })
+        this.state.id ? this.onHandlerEdit(values) : this.onHandlerAdd(values)
     };
 
     render() {
