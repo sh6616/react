@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import { Form, Input, Button, Table, Switch, message, Modal } from "antd";
 //api
 import { GetList, Delete, Edit, Status } from '@api/department'
+// table 组件
+// import TableComponent from "@c/tableData/Index";
+
 class DepartmentList extends Component {
     constructor(props) {
         super(props)
@@ -90,7 +93,7 @@ class DepartmentList extends Component {
     }
     //搜索
     onFinish = (value) => {
-        if(this.state.loadingTable){return false}
+        if (this.state.loadingTable) { return false }
         this.loadData()
     }
     //模态框  删除  确认按钮
@@ -115,7 +118,6 @@ class DepartmentList extends Component {
 
         // let requestData = 
         Edit(data).then(response => {
-            console.log(response)
             if (response.data.code === 1) {
                 message.success(response.data.msg)
             }
@@ -144,7 +146,19 @@ class DepartmentList extends Component {
     }
     //删除
     onHandlerDelete = (id) => {
+        if (!id) { return false }
         this.setState({ visible: true, id })
+    }
+    //批量删除
+    onHandlerDeletesT = () => {
+        let ids = []
+        let selectedRowKeysData = this.state.selectedRowKeys;
+        if (selectedRowKeysData.length === 0) { return false }
+        let dataData = this.state.data;
+        for (let i = 0; i < selectedRowKeysData.length; i++) {
+            ids.push(dataData[selectedRowKeysData[i]].id)
+        }
+        this.setState({ visible: true, id: ids })
     }
     //复选框
     onSelectChange = selectedRowKeys => {
@@ -167,7 +181,9 @@ class DepartmentList extends Component {
                     </Form.Item>
                 </Form>
                 <div className="table-wrap">
+                    {/* <TableComponent columns={columns}></TableComponent> */}
                     <Table loading={loadingTable} rowSelection={rowSelection} columns={columns} dataSource={data} bordered></Table>
+                    <Button onClick={this.onHandlerDeletesT()}>批量删除</Button>
                 </div>
                 <Modal
                     title="Tip"
