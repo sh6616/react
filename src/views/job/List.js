@@ -6,7 +6,7 @@ import { Form, Input, Button, Table, Switch, message, Modal } from "antd";
 //api
 import { GetList, Delete, Edit, Status } from '@api/department'
 // table 组件
-// import TableComponent from "@c/tableData/Index";
+import TableComponent from "@c/tableData/Index";
 
 class DepartmentList extends Component {
     constructor(props) {
@@ -181,7 +181,7 @@ class DepartmentList extends Component {
                     </Form.Item>
                 </Form>
                 <div className="table-wrap">
-                    {/* <TableComponent columns={columns}></TableComponent> */}
+                    <TableComponent columns={columns}></TableComponent>
                     <Table loading={loadingTable} rowSelection={rowSelection} columns={columns} dataSource={data} bordered></Table>
                     <Button onClick={this.onHandlerDeletesT()}>批量删除</Button>
                 </div>
