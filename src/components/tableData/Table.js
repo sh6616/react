@@ -1,29 +1,30 @@
 import React, { Component, Fragment } from "react";
 // propTypes
 import PropTypes from 'prop-types';
-// antd
-import{ Table, Row, Col, Button, Pagination } from "antd";
+//antd
+import { Table, Row, Col, Pagination, Button } from "antd";
+
 class TableBasis extends Component {
-    render(){
-        const { columns, dataSource, total, changePageCurrent, changePageSize, batchButton, handlerDelete, rowSelection, rowkey } = this.props;
+    render() {
+        const { columns, dataSource, total, changePageCurrent, changePageSize, batchButton, handlerDeletesT, rowSelection } = this.props
         return (
             <Fragment>
-                <Table pagination={false} rowKey={rowkey} rowSelection={rowSelection} columns={columns} dataSource={dataSource} bordered />
-                <div className="spacing-30"></div>
+                <Table pagination={false} columns={columns} rowSelection={rowSelection} dataSource={dataSource} bordered></Table>
                 <Row>
                     <Col span={8}>
-                        { batchButton && <Button onClick={handlerDelete}>批量删除</Button> }
+                        {batchButton && <Button onClick={handlerDeletesT}>批量删除</Button>}
                     </Col>
                     <Col span={16}>
                         <Pagination
+                            defaultCurrent={1}
                             onChange={changePageCurrent}
                             onShowSizeChange={changePageSize}
                             className="pull-right"
                             total={total}
                             showSizeChanger
                             showQuickJumper
-                            showTotal={total => `Total ${total} items`}
-                        />
+                            showTotal={total => `Total  ${total} items`}
+                        ></Pagination>
                     </Col>
                 </Row>
             </Fragment>

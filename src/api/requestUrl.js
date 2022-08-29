@@ -1,6 +1,6 @@
 const requestUrl = {
     // departmen
-    "departmentList": "/department/list/",           // 列表，有分页
+    "departmentList": "/department/getList/",           // 列表，有分页
     "getDepartmentList": "/department/departmentList/",           // 列表，无分页
     "departmentListDelete": "/department/delete/",   // 删除
     "departmentAdd": "/department/add/",             // 添加

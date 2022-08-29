@@ -5,18 +5,18 @@ import { MenuFoldOutlined } from "@ant-design/icons";
 import "./aside.scss";
 
 class Header extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             collapsed: props.collapsed
         };
     }
     // 生命周期，监听父级 props 的值变化
-    componentWillReceiveProps({ collapsed }){
-        this.setState({
-            collapsed
-        })
-    }
+    // componentWillReceiveProps({ collapsed }){
+    //     this.setState({
+    //         collapsed
+    //     })
+    // }
     toggleMenu = () => {
         this.props.toggle();
     }
@@ -25,7 +25,7 @@ class Header extends Component {
         // 路由跳转
         this.props.history.push('/');
     }
-    render(){
+    render() {
         const { collapsed } = this.state;
         return (
             <div className={collapsed ? "collapsed-close" : ""}>
@@ -38,7 +38,7 @@ class Header extends Component {
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         )
     }

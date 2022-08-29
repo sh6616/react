@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 // 
 import { Link } from "react-router-dom";
 //antd
-import { Form, Input, Button, Table, Switch, message, Modal } from "antd";
+import { Form, Input, Button,  Switch, message, Modal } from "antd";
 //api
 import { GetList, Delete, Edit, Status } from '@api/department'
 // table 组件
@@ -66,7 +66,71 @@ class DepartmentList extends Component {
                 }
             ],
             //表数据
-            data: []
+            data: [],
+
+             // 表头
+             tableConfig: {
+                url: "departmentList",
+                method: 'post',
+                checkbox: true,
+                batchButton: true,
+                thead: [
+                    {
+                        title: '部门名称',
+                        dataIndex: 'name',
+                        key: 'name',
+                        align: 'center',
+                        editable: true,
+                    },
+                    {
+                        title: '禁启用',
+                        dataIndex: 'status',
+                        key: 'status',
+                        align: 'center',
+                        render: (res, rowData) => {
+                            return <Switch onChange={() => this.onHandlerSwitch(rowData)} loading={rowData.id === this.state.id} checkedChildren="开启" unCheckedChildren="禁用" defaultChecked={rowData.status === "1" ? true : false} />
+                        }
+                    },
+                    {
+                        title: '人员数量',
+                        dataIndex: 'number',
+                        key: 'number',
+                        align: 'center'
+                    },
+                    {
+                        title: '操作',
+                        dataIndex: 'operation',
+                        key: 'operation',
+                        align: 'center',
+                        render: (res, rowData) => {
+                            return (
+                                <div className="inline-button">
+                                    <Button type="primary" >
+                                        <Link to={{ pathname: '/index/job/add', state: { id: rowData.id } }}>编辑</Link>
+                                    </Button>
+                                    <Button onClick={() => this.onHandlerDelete(rowData.id)}>删除</Button>
+                                </div>
+                            )
+                        }
+                    }
+                ],
+                formItem: [
+                    {
+                        type: "Input",
+                        label: "部门名称",
+                        name: "name",
+                        placeholder: "请输入部门名称"
+                    },
+                    {
+                        type: "Select",
+                        label: "禁启用",
+                        name: "status",
+                        placeholder: "请选择",
+                        style: { width: "100px" },
+                        optionsKey: "status"
+                    },
+                ]
+            },
         }
     }
     componentDidMount() {
@@ -160,16 +224,9 @@ class DepartmentList extends Component {
         }
         this.setState({ visible: true, id: ids })
     }
-    //复选框
-    onSelectChange = selectedRowKeys => {
-        this.setState({ selectedRowKeys: selectedRowKeys });
-    };
+
     render() {
-        const { columns, data, loadingTable } = this.state
-        //复选框
-        const rowSelection = {
-            onChange: this.onSelectChange,
-        };
+
         return (
             <Fragment>
                 <Form layout="inline" onFinish={this.onFinish}>
@@ -181,9 +238,7 @@ class DepartmentList extends Component {
                     </Form.Item>
                 </Form>
                 <div className="table-wrap">
-                    <TableComponent columns={columns}></TableComponent>
-                    <Table loading={loadingTable} rowSelection={rowSelection} columns={columns} dataSource={data} bordered></Table>
-                    <Button onClick={this.onHandlerDeletesT()}>批量删除</Button>
+                    <TableComponent batchButton={true} config={this.state.tableConfig} />
                 </div>
                 <Modal
                     title="Tip"
