@@ -35,7 +35,7 @@ class TableBasis extends Component {
 TableBasis.propTypes = {
     columns: PropTypes.array,
     dataSource: PropTypes.array,
-    total: PropTypes.number,
+    // total: PropTypes.number,
     changePageCurrent: PropTypes.func,
     changePageSize: PropTypes.func,
     batchButton: PropTypes.bool,
@@ -46,7 +46,7 @@ TableBasis.propTypes = {
 TableBasis.defaultProps = {
     column: [],
     dataSource: [],
-    total: 0,
+    // total: 0,
     batchButton: true,
     rowkey: "id"
 }
