@@ -7,8 +7,7 @@ import { Button, Switch, message } from "antd";
 import { Edit, Status } from '@api/department'
 // table 组件
 import TableComponent from "@c/tableData/Index";
-// 组件
-// import FormCom from "@c/form/Index"
+
 
 class DepartmentList extends Component {
     constructor(props) {
@@ -82,15 +81,7 @@ class DepartmentList extends Component {
                         label: "部门名称",
                         name: "name",
                         placeholder: "请输入部门名称"
-                    },
-                    {
-                        type: "Select",
-                        label: "禁启用",
-                        name: "status",
-                        placeholder: "请选择",
-                        style: { width: "100px" },
-                        optionsKey: "status"
-                    },
+                    }
                 ]
             },
         }

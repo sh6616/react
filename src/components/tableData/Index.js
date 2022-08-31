@@ -7,12 +7,13 @@ import { TableList } from '@api/common'
 import requestUrl from '@api/requestUrl.js'
 
 //antd
-import { Form, Input, Button, message, Modal } from "antd";
-
-import TableBasis from "@c/tableData/Table";
+import {  message, Modal } from "antd";
 
 //api
-import { GetList, Delete, Edit, Status } from '@api/department'
+import {  Delete } from '@api/department'
+//ui容器
+import TableBasis from "@c/tableData/Table";
+import FormSearch from "@c/formSearch/Index";
 
 class TableComponent extends Component {
     constructor(props) {
@@ -23,6 +24,7 @@ class TableComponent extends Component {
             //请求参数
             pageNumber: 1,
             pageSize: 10,
+            searchData: '',
             total: 0,
             //表数据
             data: [],
@@ -35,17 +37,17 @@ class TableComponent extends Component {
     }
 
     componentDidMount() {
-        this.loadData();
+        this.loadDada();
         // 返回子组件实例
         this.props.onRef(this);  // 子组件调用父组件方法，并把子组件实例传回给父组件
     }
 
-    loadData = (value) => {
+    loadDada = (value) => {
         const requestData = {
             url: requestUrl[this.props.config.url],
             method: this.props.config.method,
             data: {
-                value: value === undefined ? '' : value,
+                value: this.state.searchData === undefined ? '' : this.state.searchData,
                 pageNumber: this.state.pageNumber,
                 pageSize: this.state.pageSize,
             }
@@ -76,7 +78,7 @@ class TableComponent extends Component {
         this.setState({
             pageNumber: value
         }, () => {
-            this.loadData();
+            this.loadDada();
         });
     }
     //下拉页码
@@ -85,13 +87,8 @@ class TableComponent extends Component {
             pageNumber: 1,
             pageSize: page
         }, () => {
-            this.loadData();
+            this.loadDada();
         });
-    }
-    //搜索
-    onFinish = (value) => {
-        if (this.state.loadingTable) { return false }
-        this.loadData(value.username)
     }
     //模态框  删除  确认按钮
     handleOk = e => {
@@ -101,7 +98,7 @@ class TableComponent extends Component {
             this.setState({
                 visible: false,
             });
-            this.loadData()
+            this.loadDada()
         })
     }
     //模态框  删除  取消按钮
@@ -126,10 +123,19 @@ class TableComponent extends Component {
         }
         this.setState({ visible: true, id: ids });
     }
+    search = (searchData) => {
+        this.setState({
+            pageNumber: 1,
+            pageSize: 10,
+            searchData: searchData.name
+        }, () => {
+            this.loadDada();
+        })
+    }
 
     render() {
-        const { loadingTable, data } = this.state
-        const { checkbox, thead, batchButton } = this.props.config
+        const {  data } = this.state
+        const { checkbox, thead,  formItem, } = this.props.config
         //复选框
         const rowSelection = {
             onChange: this.onSelectChange,
@@ -137,14 +143,7 @@ class TableComponent extends Component {
         return (
             <Fragment>
                 {/* 搜索 */}
-                <Form layout="inline" onFinish={this.onFinish}>
-                    <Form.Item label="部门名称" name="username">
-                        <Input ref='getDepartValue' placeholder="请输入部门名称"></Input>
-                    </Form.Item>
-                    <Form.Item shouldUpdate={true}>
-                        <Button type="primary" htmlType="submit">搜索</Button>
-                    </Form.Item>
-                </Form>
+                <FormSearch formItem={formItem} search={this.search} />
                 <div className="table-wrap">
                     <TableBasis
                         columns={thead}

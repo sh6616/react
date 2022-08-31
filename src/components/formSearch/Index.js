@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-//API
-import { requestData } from '@api/common'
-//url
-import requestUrl from '@api/requestUrl.js'
+// propTypes
+import PropTypes from 'prop-types';
 // antd
-import { Form, Input, Button, Select, InputNumber, Radio, message } from "antd";
-const { Option } = Select;
+import { Form, Input, Button, Select, InputNumber, Radio } from "antd";
 
-class FormCom extends Component {
+const { Option } = Select;
+class FormSearch extends Component {
 
     constructor(props) {
         super(props);
@@ -15,19 +13,17 @@ class FormCom extends Component {
             loading: false,
             mesPreix: {
                 "Input": "请输入",
-                "Editor": "请输入",
                 "Radio": "请选择",
-                "Select": "请选择",
-                "SelectComponent": "请选择",
-                "Date": "请选择",
-                "Upload": "请上传"
+                "Select": "请选择"
             }
         }
     }
 
-    // 校验规则 
-    rules = (item) => {
+    UNSAFE_componentWillReceiveProps({ formConfig }) {
+        this.refs.form.setFieldsValue(formConfig.setFieldValue)
+    }
 
+    rules = (item) => {
         // state
         const { mesPreix } = this.state;
         let rules = [];
@@ -36,39 +32,22 @@ class FormCom extends Component {
             let message = item.message || `${mesPreix[item.type]}${item.label}`; // 请输入xxxxx，请选择xxxxxx
             rules.push({ required: true, message })
         }
-
         if (item.rules && item.rules.length > 0) {
-            rules = rules.concat(item.rules)
+            rules = rules.concat(item.rules);
         }
         return rules;
     }
 
-    // radio
-    radioElem = (item) => {
-        const rules = this.rules(item);
-        return (
-            <Form.Item label={item.label} name={item.name} key={item.name} rules={rules}>
-                <Radio.Group>
-                    {
-                        item.options && item.options.map(elem => {
-                            return <Radio value={elem.value} key={elem.value}>{elem.label}</Radio>
-                        })
-                    }
-                </Radio.Group>
-            </Form.Item>
-        )
-    }
     // input
     inputElem = (item) => {
         const rules = this.rules(item);
-
         return (
             <Form.Item label={item.label} name={item.name} key={item.name} rules={rules}>
                 <Input style={item.style} placeholder={item.placeholder} />
             </Form.Item>
         )
     }
-    // inputNumber
+    // input
     inputNumberElem = (item) => {
         const rules = this.rules(item);
         return (
@@ -92,6 +71,21 @@ class FormCom extends Component {
             </Form.Item>
         )
     }
+    // select
+    radioElem = (item) => {
+        const rules = this.rules(item);
+        return (
+            <Form.Item label={item.label} name={item.name} key={item.name} rules={rules}>
+                <Radio.Group>
+                    {
+                        item.options && item.options.map(elem => {
+                            return <Radio value={elem.value} key={elem.value}>{elem.label}</Radio>
+                        })
+                    }
+                </Radio.Group>
+            </Form.Item>
+        )
+    }
 
     // 初始化
     initFormItem = () => {
@@ -100,66 +94,47 @@ class FormCom extends Component {
         if (!formItem || (formItem && formItem.length === 0)) { return false; }
         // 循环处理
         const formList = []
-        formItem.map(item => {
-            if (item.type === "Input") {
-                formList.push(this.inputElem(item))
-            }
+        formItem.forEach(item => {
+            if (item.type === "Input") { formList.push(this.inputElem(item)); }
             if (item.type === "Select") {
-                formList.push(this.selectElem(item))
+                // item.options = Store.getState().config[item.optionsKey];
+                formList.push(this.selectElem(item));
             }
-            if (item.type === "InputNumber") {
-                formList.push(this.inputNumberElem(item))
-            }
-            if (item.type === "Radio") { formList.push(this.radioElem(item)) }
-
-
-            
-        });
-
-
-
-        
+            if (item.type === "InputNumber") { formList.push(this.inputNumberElem(item)); }
+            if (item.type === "Radio") { formList.push(this.radioElem(item)); }
+        })
         return formList;
     }
 
-
-    onSubmit = (values) => {
-        const data = {
-            url: requestUrl[this.props.formConfig.url],
-            method: 'post',
-            data: values
-        }
-        this.setState({
-            loading: true
-        })
-        requestData(data).then(response => {
-            if (response.code === 1) {
-                message.success(response.msg)
+    onSubmit = (value) => {  // 添加、修改
+        const searchData = {};
+        for (let key in value) {
+            if (value[key] !== undefined && value[key] !== "") {
+                searchData[key] = value[key]
             }
-            this.setState({
-                loading: false
-            })
-        }).catch(error => {
-            this.setState({
-                loading: false
-            })
-        })
-    };
+        }
+        this.props.search(searchData)
+    }
 
     render() {
         return (
-            <Form onFinish={this.onSubmit} initialValues={{ status: true, number: 0 }} {...this.props.fomrLayout} ref='form'>
+            <Form layout="inline" ref="form" onFinish={this.onSubmit} initialValues={this.props.formConfig.initValue} {...this.props.formLayout}>
                 {this.initFormItem()}
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Submit
-                    </Button>
+                    <Button loading={this.state.loading} type="primary" htmlType="submit">搜索</Button>
                 </Form.Item>
-
             </Form>
         )
     }
 
 }
 
-export default FormCom;
+// 校验数据类型
+FormSearch.propTypes = {
+    formConfig: PropTypes.object
+}
+// 默认
+FormSearch.defaultProps = {
+    formConfig: {}
+}
+export default FormSearch;
