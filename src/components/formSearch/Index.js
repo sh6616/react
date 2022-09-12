@@ -3,6 +3,10 @@ import React, { Component } from "react";
 import PropTypes from 'prop-types';
 // antd
 import { Form, Input, Button, Select, InputNumber, Radio } from "antd";
+//connect
+import { connect } from "react-redux"
+//store
+// import store from "../../stroe/Index";
 
 const { Option } = Select;
 class FormSearch extends Component {
@@ -137,4 +141,26 @@ FormSearch.propTypes = {
 FormSearch.defaultProps = {
     formConfig: {}
 }
-export default FormSearch;
+
+const mapStateToProps = (state) => ({
+    config: state.config
+})
+
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         search: () => {
+//             //处理业务逻辑
+
+//             dispatch({
+//                 type:"aaaa",
+//                 payload:{}
+//             })
+//         }
+//     }
+// }
+
+export default connect(
+    mapStateToProps,
+    null
+)(FormSearch);
+

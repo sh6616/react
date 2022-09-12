@@ -81,6 +81,18 @@ class DepartmentList extends Component {
                         label: "部门名称",
                         name: "name",
                         placeholder: "请输入部门名称"
+                    },
+                    {
+                        type: "Select",
+                        label: "禁启用",
+                        name: "status",
+                        placeholder: "请选择",
+                        style: { width: "100px" },
+                        optionsKey: "status",
+                        options: [
+                            { 'value': "true", 'label': '开启' },
+                            { 'value': "false", 'label': '禁用' }
+                        ]
                     }
                 ]
             },

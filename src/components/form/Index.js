@@ -100,26 +100,21 @@ class FormCom extends Component {
         if (!formItem || (formItem && formItem.length === 0)) { return false; }
         // 循环处理
         const formList = []
-        formItem.map(item => {
-            if (item.type === "Input") {
-                formList.push(this.inputElem(item))
+        for (let i = 0; i < formItem.length; i++) {
+            if (formItem[i].type === "Input") {
+                formList.push(this.inputElem(formItem[i]))
             }
-            if (item.type === "Select") {
-                formList.push(this.selectElem(item))
+            if (formItem[i].type === "Select") {
+                formList.push(this.selectElem(formItem[i]))
             }
-            if (item.type === "InputNumber") {
-                formList.push(this.inputNumberElem(item))
+            if (formItem[i].type === "InputNumber") {
+                formList.push(this.inputNumberElem(formItem[i]))
             }
-            if (item.type === "Radio") { formList.push(this.radioElem(item)) }
-
-
-            
-        });
-
-
-
-        
-        return formList;
+            if (formItem[i].type === "Radio") {
+                formList.push(this.radioElem(formItem[i]))
+            }
+        }
+        return formList
     }
 
 

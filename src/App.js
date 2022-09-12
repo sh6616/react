@@ -5,7 +5,10 @@ import Login from './views/login/index';
 import Index from './views/index/Index';
 // 私有组件方法
 import PrivateRouter from "./components/privateRouter/Index";
-
+// store
+import Store from "./stroe/Index";
+// Provider
+import { Provider } from "react-redux";
 
 
 
@@ -17,12 +20,14 @@ class App extends React.Component {
   }
   render() {
     return (
-      <BrowserRouter>
-        <Switch>
-          <Route exact render={() => <Login />} path='/'></Route>
-          <PrivateRouter component={Index}  path='/index'></PrivateRouter>
-        </Switch>
-      </BrowserRouter>
+      <Provider store={Store}>
+        <BrowserRouter>
+          <Switch>
+            <Route exact render={() => <Login />} path='/'></Route>
+            <PrivateRouter component={Index} path='/index'></PrivateRouter>
+          </Switch>
+        </BrowserRouter>
+      </Provider>
     )
   }
 }
