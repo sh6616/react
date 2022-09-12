@@ -54,7 +54,7 @@
     "react-cookies": "^0.1.1",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
-    "react-redux": "^7.2.1",
+    "react-redux": "^7.2.8",
     "redux": "^4.0.5",
     "redux-promise": "^0.6.0",
     "redux-thunk": "^2.3.0",
@@ -74,9 +74,9 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "build:dev":"dotenv -e .env.development react-app-rewrite build",
-    "build:pro":"dotenv -e .env.production react-app-rewrite build",
-    "build:test":"dotenv -e .env.test react-app-rewrite build"
+    "build:dev": "dotenv -e .env.development react-app-rewrite build",
+    "build:pro": "dotenv -e .env.production react-app-rewrite build",
+    "build:test": "dotenv -e .env.test react-app-rewrite build"
   },
   "eslintConfig": {
     "extends": "react-app"
