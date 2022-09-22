@@ -7,6 +7,9 @@ import { Form, Input, Button, Select, InputNumber, Radio } from "antd";
 import { connect } from "react-redux"
 //store
 // import store from "../../stroe/Index";
+//url
+import requestUrl from '@api/requestUrl.js'
+import { TableList } from '@api/common'
 
 const { Option } = Select;
 class FormSearch extends Component {
@@ -91,6 +94,14 @@ class FormSearch extends Component {
         )
     }
 
+    componentDidMount = () => {
+        this.props.search({
+            url: 'departmentList',
+            searchData: { name: 'hvh' }
+        })
+    }
+
+
     // 初始化
     initFormItem = () => {
         const { formItem } = this.props;
@@ -117,7 +128,10 @@ class FormSearch extends Component {
                 searchData[key] = value[key]
             }
         }
-        this.props.search(searchData)
+        this.props.search({
+            url: 'departmentList',
+            searchData: searchData
+        })
     }
 
     render() {
@@ -146,21 +160,37 @@ const mapStateToProps = (state) => ({
     config: state.config
 })
 
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//         search: () => {
-//             //处理业务逻辑
+const mapDispatchToProps = (dispatch) => {
+    return {
+        search: (params) => {
+            //处理业务逻辑
+            const requestData = {
+                url: requestUrl[params.url],
+                method: 'post',
+                data: {
+                    value: params.searchData.name,
+                    pageNumber: 1,
+                    pageSize: 10,
+                }
+            }
+            TableList(requestData).then(response => {
+                dispatch({
+                    type: "SEARCH_DEPARTMENT_LIST",
+                    payload: response
+                })
+            }).catch(error => {
 
-//             dispatch({
-//                 type:"aaaa",
-//                 payload:{}
-//             })
-//         }
-//     }
-// }
+            })
+
+
+
+
+        }
+    }
+}
 
 export default connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
 )(FormSearch);
 

@@ -3,13 +3,15 @@ import React, { Component, Fragment } from "react";
 import PropTypes from 'prop-types';
 //antd
 import { Table, Row, Col, Pagination, Button } from "antd";
+//connect
+import { connect } from "react-redux"
 
 class TableBasis extends Component {
     render() {
         const { columns, dataSource, total, changePageCurrent, changePageSize, batchButton, handlerDeletesT, rowSelection } = this.props
         return (
             <Fragment>
-                <Table pagination={false} columns={columns} rowSelection={rowSelection} dataSource={dataSource} bordered></Table>
+                <Table pagination={false} columns={columns} rowSelection={rowSelection} dataSource={this.props.list} bordered></Table>
                 <Row>
                     <Col span={8}>
                         {batchButton && <Button onClick={handlerDeletesT}>批量删除</Button>}
@@ -50,4 +52,26 @@ TableBasis.defaultProps = {
     batchButton: true,
     rowkey: "id"
 }
-export default TableBasis;
+
+//把store中的数据映射到这个组件映射到这个组件变成props
+const mapStateToProps = (state) => {
+    // console.log(state.department.payload)
+    return {
+        list: state.department.departmentList.payload.response
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        search: (params) => {
+            dispatch({
+                type: "aaaa",
+                payload: {}
+            })
+        }
+    }
+}
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TableBasis);

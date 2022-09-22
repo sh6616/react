@@ -7,10 +7,10 @@ import { TableList } from '@api/common'
 import requestUrl from '@api/requestUrl.js'
 
 //antd
-import {  message, Modal } from "antd";
+import { message, Modal } from "antd";
 
 //api
-import {  Delete } from '@api/department'
+import { Delete } from '@api/department'
 //ui容器
 import TableBasis from "@c/tableData/Table";
 import FormSearch from "@c/formSearch/Index";
@@ -134,8 +134,8 @@ class TableComponent extends Component {
     }
 
     render() {
-        const {  data } = this.state
-        const { checkbox, thead,  formItem, } = this.props.config
+        const { data } = this.state
+        const { checkbox, thead, formItem, } = this.props.config
         //复选框
         const rowSelection = {
             onChange: this.onSelectChange,
