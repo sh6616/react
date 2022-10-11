@@ -163,16 +163,18 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         search: (params) => {
+            console.log("99999999999999")
             //处理业务逻辑
             const requestData = {
                 url: requestUrl[params.url],
                 method: 'post',
                 data: {
-                    value: params.searchData.name,
+                    value: '',
                     pageNumber: 1,
                     pageSize: 10,
                 }
             }
+            console.log(requestData)
             TableList(requestData).then(response => {
                 dispatch({
                     type: "SEARCH_DEPARTMENT_LIST",

@@ -55,10 +55,28 @@ TableBasis.defaultProps = {
 
 //把store中的数据映射到这个组件映射到这个组件变成props
 const mapStateToProps = (state) => {
-    // console.log(state.department.payload)
-    return {
-        list: state.department.departmentList.payload.response
+    console.log('777')
+    console.log(state.department.departmentList.payload)
+    console.log(state.department.departmentList.payload == undefined)
+
+    if (state.department.departmentList.payload == undefined) {
+        return {
+            list: ''
+        }
+    } else {
+        let data = state.department.departmentList.payload.data
+        for (let i = 0; i < data.length; i++) {
+            data[i]['key'] = data[i]['id']
+        }
+
+
+
+        return {
+            list: data
+        }
     }
+
+
 }
 
 const mapDispatchToProps = (dispatch) => {
